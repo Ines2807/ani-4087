@@ -4,9 +4,8 @@
 
 Fichier : `MaSalle/MaSalle.jenga`
 
-```python
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
+
 
 # MaSalle – Espace de travail Jenga
 # Généré par `jenga workspace` le 2026-09-24 15:20:16
