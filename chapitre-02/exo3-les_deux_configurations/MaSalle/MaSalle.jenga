@@ -1,0 +1,12 @@
+from Jenga import *
+
+with workspace("MaSalle"):
+    configurations(['Debug', 'Release'])
+    targetoses([TargetOS.WINDOWS])
+    targetarchs([TargetArch.X86_64])
+
+    with project("ApplicationBonjour"):
+        consoleapp()
+        language("C++")
+        location("ApplicationBonjour")
+        files(["src/**.cpp", "include/**.hpp"])
