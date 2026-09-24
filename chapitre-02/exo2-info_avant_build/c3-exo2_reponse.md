@@ -1,10 +1,19 @@
 # Exercice 2 - Jenga info avant build
 
+## Structure du projet
+
+```text
+exo2-info_avant_build/
+└── MaSalle/
+    ├── MaSalle.jenga
+    └── ApplicationBonjour/
+        └── src/
+            └── main.cpp
+```
+
 ## Fichier de projet Jenga
 
-
-
-
+```python
 from Jenga import *
 
 with workspace("MaSalle"):
@@ -17,18 +26,18 @@ with workspace("MaSalle"):
         language("C++")
         location("ApplicationBonjour")
         files(["src/**.cpp", "include/**.hpp"])
-
+```
 
 ## Programme minimal
 
-
+```cpp
 #include <iostream>
 
 int main() {
     std::cout << "bonjour" << std::endl;
     return 0;
 }
-
+```
 
 ## Sortie de `jenga info`
 
@@ -41,7 +50,7 @@ python -m Jenga info
 
 Sortie réelle :
 
-
+```text
 ╔══════════════════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║                ██╗███████╗███╗   ██╗ ██████╗  █████╗             ║
@@ -84,7 +93,7 @@ clang-cross-linux   clang    Linux       x86_64   gnu
 Daemon
 ------------------------------------------------------------
 Status: Not running
-
+```
 
 ## Ce que `jenga info` nous apprend que le fichier de projet ne dit pas explicitement
 

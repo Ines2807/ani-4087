@@ -4,12 +4,7 @@
 
 Fichier : `MaSalle/MaSalle.jenga`
 
-
-
-
-# MaSalle – Espace de travail Jenga
-# Généré par `jenga workspace` le 2026-09-24 15:20:16
-
+```python
 from Jenga import *
 
 with workspace("MaSalle"):
@@ -17,7 +12,6 @@ with workspace("MaSalle"):
     targetoses([TargetOS.WINDOWS, TargetOS.LINUX, TargetOS.MACOS])
     targetarchs([TargetArch.X86_64])
 
-    # Projet : ApplicationBonjour
     with project("ApplicationBonjour"):
         consoleapp()
         language("C++")
