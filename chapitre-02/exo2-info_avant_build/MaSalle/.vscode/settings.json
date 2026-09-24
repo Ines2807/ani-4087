@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "*.jenga": "python"
+  },
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportUndefinedVariable": "none",
+    "reportMissingImports": "none",
+    "reportGeneralTypeIssues": "none",
+    "reportAttributeAccessIssue": "none"
+  }
+}
