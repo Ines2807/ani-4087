@@ -23,20 +23,20 @@ with workspace("MaSalle"):
         language("C++")
         location("ApplicationBonjour")
         files(["src/**.cpp", "include/**.hpp"])
-```
+
 
 ## Programme minimal
 
 Fichier : `MaSalle/ApplicationBonjour/src/main.cpp`
 
-```cpp
+
 #include <iostream>
 
 int main() {
     std::cout << "bonjour" << std::endl;
     return 0;
 }
-```
+
 
 ## Sortie de `jenga build`
 
@@ -51,7 +51,7 @@ cd 'C:\Users\INES\Documents\chapitre-02\exo1-le_projet_minimal\MaSalle'
 
 Sortie réelle :
 
-```text
+
 ╔══════════════════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║                ██╗███████╗███╗   ██╗ ██████╗  █████╗             ║
@@ -107,7 +107,7 @@ Projects Built:  1/1
 Time:           5.50s
 Status:         ✓ SUCCESS
 ════════════════════════════════════════════════════════════════════════════════
-```
+
 
 ## Conclusion
 
