@@ -1,7 +1,0 @@
-{
-  "typeCheckingMode": "basic",
-  "reportUndefinedVariable": "none",
-  "reportMissingImports": "none",
-  "reportGeneralTypeIssues": "none",
-  "reportAttributeAccessIssue": "none"
-}
