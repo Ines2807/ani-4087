@@ -130,6 +130,7 @@ int nkmain(const NkEntryState& state) {
     };
     const float32 sunIntensity = EnvironmentFloat("SALLE_INTENSITE", 3.f);
     const bool castShadow = EnvironmentEnabled("SALLE_CAST_SHADOW", true);
+    const bool benchmark = EnvironmentEnabled("SALLE_BENCH", false);
 
     bool running = true;
     uint32 width = deviceInfo.width;
@@ -228,6 +229,8 @@ int nkmain(const NkEntryState& state) {
 
         renderer->Present();
         renderer->EndFrame();
+        if (benchmark)
+            running = false;
     }
 
     device->WaitIdle();
