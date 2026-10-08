@@ -1,71 +1,89 @@
-#include "NKWindow/NKMain.h"
-#include "NKWindow/Core/NkWindow.h"
-#include "NKWindow/Core/NkWindowConfig.h"
-#include "NKEvent/NkWindowEvent.h"
-#include "NKEvent/NkKeyboardEvent.h"
-#include "NKTime/NkTime.h"
-#include "NKLogger/NkLog.h"
-#include "NKRHI/Core/NkDeviceFactory.h"
+#include <iostream>
+#include <set>
+#include <string>
+#include <unordered_set>
+#include <vector>
 
-using namespace nkentseu;
+using namespace std;
 
-static void ConfigureAppData(NkAppData& data) {
-    data.appName = "Exo1NomCarte";
+string readableName(const string& api) {
+    if (api == "VULKAN") return "Vulkan";
+    if (api == "DX12") return "DirectX 12";
+    if (api == "DX11") return "DirectX 11";
+    if (api == "OPENGL") return "OpenGL";
+    if (api == "METAL") return "Metal";
+    if (api == "SOFTWARE") return "Software";
+    return api;
 }
-NK_REGISTER_ENTRY_APPDATA_UPDATER(ConfigureAppData)
 
-int nkmain(const NkEntryState& state) {
-    (void)state;
+// On simule ici l'auto-detection : chaque plateforme a ses backends preferes.
+vector<string> orderForPlatform(const string& platform) {
+    if (platform == "WINDOWS") {
+        return {"VULKAN", "DX12", "DX11", "OPENGL", "SOFTWARE"};
+    }
+    if (platform == "MACOS") {
+        return {"METAL", "OPENGL", "SOFTWARE"};
+    }
+    if (platform == "IOS") {
+        return {"METAL", "SOFTWARE"};
+    }
+    if (platform == "ANDROID") {
+        return {"VULKAN", "OPENGL", "SOFTWARE"};
+    }
+    return {"VULKAN", "OPENGL", "SOFTWARE"};
+}
 
-    NkWindowConfig windowConfig;
-    windowConfig.title = "Exercice 1 - Backend graphique";
-    windowConfig.width = 960;
-    windowConfig.height = 540;
-    windowConfig.centered = true;
-    windowConfig.resizable = true;
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-    NkWindow window(windowConfig);
-    if (!window.IsValid()) {
-        logger.Error("Creation de la fenetre impossible");
-        return 1;
+    int N;
+    cin >> N;
+
+    set<string> distinctNames;
+    int ignoredTotal = 0;
+    int softwareCount = 0;
+
+    for (int i = 0; i < N; ++i) {
+        string machineName, platform;
+        int k;
+        cin >> machineName >> platform >> k;
+
+        vector<string> listed(k);
+        unordered_set<string> present;
+        for (int j = 0; j < k; ++j) {
+            cin >> listed[j];
+            present.insert(listed[j]);
+        }
+
+        const vector<string> platformOrder = orderForPlatform(platform);
+        const unordered_set<string> supported(platformOrder.begin(), platformOrder.end());
+
+        // Les API hors de la liste de la plateforme ne peuvent pas etre retenues.
+        for (const string& api : listed) {
+            if (supported.find(api) == supported.end())
+                ++ignoredTotal;
+        }
+
+        // On prend le premier backend prefere qui figure parmi ceux disponibles.
+        string chosen = "SOFTWARE";
+        for (const string& api : platformOrder) {
+            if (present.find(api) != present.end()) {
+                chosen = api;
+                break;
+            }
+        }
+
+        if (chosen == "SOFTWARE")
+            ++softwareCount;
+
+        const string displayName = readableName(chosen);
+        cout << machineName << ' ' << displayName << '\n';
+        distinctNames.insert(displayName);
     }
 
-    // La fenetre donne a NKRHI la surface ou il pourra dessiner.
-    NkDeviceInitInfo deviceInfo{};
-    deviceInfo.surface = window.GetSurfaceDesc();
-    deviceInfo.width = (uint32)window.GetSize().width;
-    deviceInfo.height = (uint32)window.GetSize().height;
-
-    // Nkentseu choisit tout seul le backend qui convient a cette machine.
-    NkIDevice* device = NkDeviceFactory::CreateAutoDetect(deviceInfo);
-    if (!device || !device->IsValid()) {
-        logger.Error("Creation du peripherique graphique impossible");
-        NkDeviceFactory::Destroy(device);
-        window.Close();
-        return 2;
-    }
-
-    logger.Info("Backend graphique choisi : {0}", NkGraphicsApiName(device->GetApi()));
-
-    bool running = true;
-    NkEventSystem& events = NkEvents();
-    events.AddEventCallback<NkWindowCloseEvent>([&](NkWindowCloseEvent*) {
-        running = false;
-    });
-    events.AddEventCallback<NkKeyPressEvent>([&](NkKeyPressEvent* event) {
-        if (event->GetKey() == NkKey::NK_ESCAPE)
-            running = false;
-    });
-
-    // Ici, on teste seulement le peripherique : aucune image n'est encore dessinee.
-    while (running && window.IsOpen()) {
-        events.PollEvents();
-        NkClock::Sleep(10);
-    }
-
-    // On libere d'abord le peripherique, puis on ferme la fenetre.
-    device->WaitIdle();
-    NkDeviceFactory::Destroy(device);
-    window.Close();
+    cout << "IGNOREES " << ignoredTotal << '\n';
+    cout << "LOGICIEL " << softwareCount << '\n';
+    cout << "DIFFERENTES " << distinctNames.size() << '\n';
     return 0;
 }
