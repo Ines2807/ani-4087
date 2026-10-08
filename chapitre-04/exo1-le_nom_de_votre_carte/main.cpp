@@ -6,7 +6,9 @@
 
 using namespace std;
 
-// Convertit le code technique d'une API en libellé lisible pour l'affichage.
+// Cette fonction transforme les identifiants techniques (VULKAN, DX12, etc.)
+// en un nom plus lisible pour l'utilisateur final. Par exemple :
+// "DX12" devient "DirectX 12".
 string readableName(const string& api) {
     if (api == "VULKAN") return "Vulkan";
     if (api == "DX12") return "DirectX 12";
@@ -14,10 +16,12 @@ string readableName(const string& api) {
     if (api == "OPENGL") return "OpenGL";
     if (api == "METAL") return "Metal";
     if (api == "SOFTWARE") return "Software";
-    return api;
+    return api; // Si l'API n'est pas reconnue, on la renvoie telle quelle.
 }
 
-// Donne l'ordre de priorité des APIs selon la plateforme cible.
+// Chaque plateforme a une liste d'API prioritaires.
+// Exemple : sur Windows, Vulkan a plus de priorité que OpenGL, car il est
+// généralement préféré lorsqu'il est disponible.
 vector<string> orderForPlatform(const string& platform) {
     if (platform == "WINDOWS") {
         return {"VULKAN", "DX12", "DX11", "OPENGL", "SOFTWARE"};
@@ -31,42 +35,46 @@ vector<string> orderForPlatform(const string& platform) {
     if (platform == "ANDROID") {
         return {"VULKAN", "OPENGL", "SOFTWARE"};
     }
+    // Plateforme inconnue : on prend un ordre simple par défaut.
     return {"VULKAN", "OPENGL", "SOFTWARE"};
 }
 
 int main() {
-    // Accélère la lecture/écriture standard pour les entrées sorties volumineuses.
+    // On désactive la synchronisation avec stdio pour accélérer les entrées/sorties.
+    // Cela est utile quand le programme lit beaucoup de données.
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int N;
+    // N = nombre total de machines à traiter.
     cin >> N;
 
-    // Stocke les données globales du traitement.
-    vector<string> selectedNames;
-    set<string> distinctNames;
-    int ignoredTotal = 0;
-    int softwareCount = 0;
+    // Variables globales pour le résumé final.
+    vector<string> selectedNames; // Contient les noms des API sélectionnées (non utilisé dans le calcul final, mais utile conceptuellement).
+    set<string> distinctNames;    // Permet de compter les noms différents de APIs choisies.
+    int ignoredTotal = 0;         // Somme des APIs ignorées pour toutes les machines.
+    int softwareCount = 0;        // Nombre de machines qui utilisent uniquement le logiciel.
 
-    // Traite chaque machine de la liste.
+    // Traitement de chaque machine.
     for (int i = 0; i < N; ++i) {
         string machineName, platform;
         int k;
+        // Lecture : nom de la machine, plateforme et nombre d'API listées.
         cin >> machineName >> platform >> k;
 
-        // Lit les APIs de cette machine et garde celles qu'on a vues.
+        // On lit les APIs de cette machine.
         vector<string> listed(k);
-        unordered_set<string> present;
+        unordered_set<string> present; // Contient uniquement les API présentes pour cette machine.
         for (int j = 0; j < k; ++j) {
             cin >> listed[j];
             present.insert(listed[j]);
         }
 
-        // On récupère l'ordre de priorité de la plateforme.
+        // On récupère l'ordre de priorité des APIs selon la plateforme.
         vector<string> platformOrder = orderForPlatform(platform);
         unordered_set<string> platformSet(platformOrder.begin(), platformOrder.end());
 
-        // Compte les APIs qui ne sont pas prises en charge par la plateforme.
+        // On compte les APIs de la machine qui ne sont pas supportées par cette plateforme.
         int ignoredCount = 0;
         for (const string& api : listed) {
             if (platformSet.find(api) == platformSet.end()) {
@@ -75,8 +83,8 @@ int main() {
         }
         ignoredTotal += ignoredCount;
 
-        // Choisit la première API supportée qui est présente.
-        // Sinon, on considère que le logiciel est utilisé.
+        // On choisit l'API la plus prioritaire supportée et présente sur la machine.
+        // Si aucune API de la plateforme n'est présente, on considère qu'on utilise le logiciel.
         string chosen = "SOFTWARE";
         for (const string& api : platformOrder) {
             if (present.find(api) != present.end()) {
@@ -85,18 +93,24 @@ int main() {
             }
         }
 
+        // Si l'API retenue est SOFTWARE, on incrémente le compteur.
         if (chosen == "SOFTWARE") {
             ++softwareCount;
         }
 
-        // Affiche le nom de la machine et l'API sélectionnée.
+        // Affichage du résultat pour cette machine.
         cout << machineName << ' ' << readableName(chosen) << '\n';
+
+        // On stocke l'API choisie pour savoir combien de valeurs différentes existent au total.
         distinctNames.insert(readableName(chosen));
     }
 
-    // Résumé final: APIs ignorées, machines logicielles et valeurs distinctes.
+    // Impression du bilan final.
+    // IGNOREES : nombre total d'API non supportées.
     cout << "IGNOREES " << ignoredTotal << '\n';
+    // LOGICIEL : nombre de machines qui n'ont aucune API supportée.
     cout << "LOGICIEL " << softwareCount << '\n';
+    // DIFFERENTES : nombre de résultats uniques affichés.
     cout << "DIFFERENTES " << distinctNames.size() << '\n';
 
     return 0;
