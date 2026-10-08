@@ -1,0 +1,20 @@
+config : ALL, essai : 1, ms : 2099
+config : ALL, essai : 2, ms : 885
+config : ALL, essai : 3, ms : 936
+config : ALL, essai : 4, ms : 910
+config : ALL, essai : 5, ms : 899
+config : ALL, essai : 6, ms : 915
+config : ALL, essai : 7, ms : 891
+config : ALL, essai : 8, ms : 971
+config : ALL, essai : 9, ms : 907
+config : ALL, essai : 10, ms : 919
+config : RENDER3D | SHADOW, essai : 1, ms : 1600
+config : RENDER3D | SHADOW, essai : 2, ms : 597
+config : RENDER3D | SHADOW, essai : 3, ms : 622
+config : RENDER3D | SHADOW, essai : 4, ms : 585
+config : RENDER3D | SHADOW, essai : 5, ms : 642
+config : RENDER3D | SHADOW, essai : 6, ms : 629
+config : RENDER3D | SHADOW, essai : 7, ms : 573
+config : RENDER3D | SHADOW, essai : 8, ms : 621
+config : RENDER3D | SHADOW, essai : 9, ms : 616
+config : RENDER3D | SHADOW, essai : 10, ms : 598

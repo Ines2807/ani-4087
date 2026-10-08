@@ -1,0 +1,5 @@
+Mes deux medianes : Avec ces durees synthetiques, la mediane est de 912 ms avec ALL et de 618 ms avec RENDER3D | SHADOW. Ces valeurs ne sont pas des mesures de ma salle.
+
+L'ecart est-il significatif : Dans ces series synthetiques, l'ecart de 294 ms entre les medianes est nettement superieur a la dispersion des essais ordinaires. Il semble donc significatif dans cet exemple, mais il faudrait de vraies mesures pour conclure sur ma salle.
+
+Pourquoi la mediane et pas la moyenne : Les premiers lancements synthetiques sont plus lents (2099 ms et 1600 ms), comme cela peut arriver quand le programme charge ses ressources depuis le disque. Ils tirent les moyennes vers le haut (1033 ms et 708 ms), alors que les medianes y sont moins sensibles.
