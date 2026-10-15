@@ -1,5 +1,11 @@
-PNG : 845210 octets, 766 x 1000
-JPEG : 112430 octets, 766 x 1000
-BMP : 2298144 octets, 766 x 1000
-TGA : 2298144 octets, 766 x 1000
-QOI : 1532096 octets, 766 x 1000
+Mon format pour un mur :
+Le format JPEG constitue le choix idéal pour une texture de mur en réalité virtuelle, 
+offrant un excellent compromis de légèreté sur le disque pour optimiser le poids global du paquet de l'application.
+
+Pourquoi :
+Les mesures montrent que les formats non compressés comme le BMP ou le TGA pèsent inutilement lourd (plus de 2 Mo), 
+tandis que le JPEG réduit considérablement la taille du fichier tout en préservant des dimensions rigoureusement identiques à l'original lors de la relecture par le moteur.
+
+Ce qui m'a surpris : 
+La différence monumentale de taille sur le disque entre les formats bruts et compressés, alors qu'une fois chargés en mémoire vive par le moteur, 
+le coût en RAM reste strictement identique puisqu'il s'agit dans tous les cas du tableau complet des pixels bruts.
